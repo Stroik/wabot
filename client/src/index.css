@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700");
+@import "react-toastify/dist/ReactToastify.css";
+@import "react-tooltip/dist/react-tooltip.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  @apply font-sans h-screen;
+  font-family: "Open Sans", sans-serif;
+}
+#root {
+  @apply grid h-screen w-full overflow-hidden;
+  grid-template-areas: "header" "main" "footer";
+  grid-template-rows: 80px 1fr 50px;
+}
+header {
+  @apply bg-gray-800 text-white;
+  grid-area: header;
+}
+
+main {
+  @apply bg-zinc-50 overflow-y-auto p-4;
+  grid-area: main;
+}
+
+footer {
+  @apply bg-gray-800 text-white grid place-content-center;
+  grid-area: footer;
+}
