@@ -3,6 +3,7 @@ import { RiCheckboxBlankCircleFill, RiInformationFill } from "react-icons/ri";
 import ReactDOMServer from "react-dom/server";
 import { useState } from "react";
 import Table from "./common/Table";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 
 interface Props {
   data: any[];
@@ -79,5 +80,10 @@ export default function ContactsTable({ data }: Props) {
       minSize: 10,
     }),
   ];
-  return <>{data && <Table data={data || []} columns={columns} />}</>;
+  return (
+    <>
+      {data && <Table data={data || []} columns={columns} />}
+      <ReactTooltip anchorSelect=".tool-tip" place="top" />
+    </>
+  );
 }

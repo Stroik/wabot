@@ -11,10 +11,10 @@ interface Buttons {
 
 interface CardProps {
   title: string;
-  status: React.ReactNode;
   buttons: Array<Buttons>;
   children: React.ReactNode;
   id: string;
+  status?: React.ReactNode;
 }
 
 export default function Card({

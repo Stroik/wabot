@@ -134,13 +134,8 @@ export default class Bot extends Client {
     }
   }
 
-  public deleteSession() {
-    this.destroy();
-    const sessionPath = join(
-      __dirname,
-      `../../.wwebjs_auth/session-bot-${this._id}`
-    );
-    rmdirSync(sessionPath, { recursive: true });
+  public async deleteSession() {
+    await this.destroy();
     return true;
   }
 

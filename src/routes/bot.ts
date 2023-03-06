@@ -30,10 +30,6 @@ const removeBot = publicProcedure
   .input(z.string())
   .mutation(async ({ input }) => {
     try {
-      let bot = botManager.getBot(input);
-      if (bot) {
-        bot.deleteSession();
-      }
       await botManager.removeBot(input);
 
       return {
@@ -127,6 +123,7 @@ const doValidate = async (input: object[], bot: Bot) => {
       await timer(1000);
       const response = await bot.validateNumber(phone);
       if (response) {
+        contact.valid = true;
         validNumbers.push(contact);
       } else {
         invalidNumbers.push(contact);

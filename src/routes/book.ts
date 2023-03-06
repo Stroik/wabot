@@ -19,6 +19,7 @@ const createBook = publicProcedure
       const book = await BookModel.create({
         name: input.name,
         description: input.description,
+        count: 0,
       });
       return { status: "success", book };
     } catch (error) {

@@ -10,7 +10,7 @@ import {
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { useState } from "react";
 import { trpc } from "../trpc";
-import Modal from "../components/common/Modal";
+import Modal, { ActionButton } from "../components/common/Modal";
 import Loading from "../components/common/Loading";
 import { botStatus } from "../utils/status";
 import Card from "../components/common/Card";
@@ -91,6 +91,21 @@ export default function Bots() {
     },
   ];
 
+  const actionButtons: ActionButton[] = [
+    {
+      label: "Cerrar",
+      onClick: () => setIsOpen(false),
+      className: "rounded bg-red-500 hover:bg-red-600 text-white px-4 py-2",
+      condition: true,
+    },
+    {
+      label: "Actualizar",
+      onClick: () => handleGetQR(id),
+      className: "rounded bg-green-500 hover:bg-green-600 text-white px-4 py-2",
+      condition: qrStatus.status !== "error",
+    },
+  ];
+
   if (isLoading) return <Loading />;
   if (isError) return <h1>Error</h1>;
 
@@ -150,32 +165,28 @@ export default function Bots() {
                 id={_id}
               >
                 <RiWhatsappFill size={56} className="text-green-500" />
-                <Modal
-                  title={title}
-                  isOpen={isOpen}
-                  onClose={() => setIsOpen(false)}
-                  onConfirm={() => console.log("Confirm!")}
-                >
-                  <div className="flex items-center justify-center gap-1">
-                    <div className="flex flex-col">
-                      {qrStatus.qr === "" ? (
-                        <Loading />
-                      ) : (
-                        <img src={qrStatus.qr} alt="qr" />
-                      )}
-                      <button
-                        className="px-4 py-2 rounded bg-blue-500 text-white"
-                        onClick={() => handleGetQR(_id)}
-                      >
-                        Actualizar
-                      </button>
-                    </div>
-                  </div>
-                </Modal>
               </Card>
             );
           })}
       </div>
+      <Modal
+        title={title}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        actionsButtons={actionButtons}
+      >
+        <div className="flex items-center justify-center gap-1">
+          <div className="flex flex-col">
+            {!qrStatus.qr ||
+            qrStatus.qr === "" ||
+            !qrStatus.qr.startsWith("https://") ? (
+              <Loading />
+            ) : (
+              <img src={qrStatus.qr} alt="qr" />
+            )}
+          </div>
+        </div>
+      </Modal>
       <ReactTooltip anchorSelect=".tool-tip" place="top" />
     </div>
   );
