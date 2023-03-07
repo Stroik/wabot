@@ -8,6 +8,7 @@ import { botRouter } from "./routes/bot";
 import { messageRouter } from "./routes/message";
 import { contactRouter } from "./routes/contact";
 import { bookRouter } from "./routes/book";
+import { configRouter } from "./routes/config";
 
 const app = express();
 const appRouter = router({
@@ -15,6 +16,7 @@ const appRouter = router({
   message: messageRouter,
   contact: contactRouter,
   book: bookRouter,
+  config: configRouter,
 });
 
 app.use(morgan("dev"));

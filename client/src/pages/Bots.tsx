@@ -6,6 +6,7 @@ import {
   RiShieldCheckFill,
   RiShieldFill,
   RiWechatFill,
+  RiQuestionAnswerLine,
 } from "react-icons/ri";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import { useState } from "react";
@@ -16,6 +17,8 @@ import { botStatus } from "../utils/status";
 import Card from "../components/common/Card";
 import GridSelector from "../components/GridSelector";
 import { useLocalStorage } from "../hooks/useLocalstorage";
+import { useNavigate } from "@tanstack/react-router";
+import PageTitle from "../components/common/PageTitle";
 
 interface Bot {
   _id: string;
@@ -25,6 +28,8 @@ interface Bot {
 }
 
 export default function Bots() {
+  const navigate = useNavigate();
+
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [id, setId] = useState("");
@@ -72,11 +77,14 @@ export default function Bots() {
     setQrStatus(data);
   };
 
+  const handleInteractions = (id: string) => {
+    navigate(`/bots/${id}/interact`);
+  };
+
   const buttonsCards = [
     {
       icon: <RiQrCodeLine size={20} className="tool-tip" />,
       onClick: (id: string) => handleStartQR(id),
-      label: "QR",
       style: "bg-green-500 text-white hover:opacity-90",
       show: true,
       "data-tooltip-content": "Solicitar codigo QR",
@@ -84,10 +92,16 @@ export default function Bots() {
     {
       icon: <RiDeleteBin6Line size={20} className="tool-tip" />,
       onClick: (id: string) => handleDelete(id),
-      label: "Eliminar",
       style: "bg-pink-700 text-white hover:opacity-90",
       show: true,
       "data-tooltip-content": "Eliminar Whatsapp",
+    },
+    {
+      icon: <RiQuestionAnswerLine size={20} className="tool-tip" />,
+      onClick: (id: string) => navigate({ to: `/bots/${id}/interact` }),
+      style: "bg-orange-700 text-white hover:opacity-90",
+      show: true,
+      "data-tooltip-content": "Generar interacciones entre bots",
     },
   ];
 
@@ -111,8 +125,10 @@ export default function Bots() {
 
   return (
     <div className="flex flex-col">
-      <div className="flex justify-between mb-4 pb-2 border-b">
-        <h1 className="text-3xl">Estado y registro de Whatsapps</h1>
+      <PageTitle
+        title="Estado y registro de Whatsapp"
+        subtitle="En esta sección se listan todos los whatsapp que se agregaron y el estado de conexión que tienen. Para agregar un nuevo Whatsapp, sólo hay que dar click en el botón azul."
+      >
         <button
           className="rounded px-4 py-2 text-white bg-cyan-700 flex items-center gap-2"
           onClick={() => {
@@ -126,13 +142,7 @@ export default function Bots() {
           <RiWhatsappFill size={28} className="text-green-500" />
           <span>Agregar nuevo</span>
         </button>
-      </div>
-      <p className="">
-        En esta sección se listan todos los whatsapp que se agregaron y el
-        estado de conexión que tienen.
-        <br /> Para agregar un nuevo Whatsapp, sólo hay que dar click en el
-        botón azul.
-      </p>
+      </PageTitle>
       <div className="flex items-center justify-end">
         <GridSelector grid={grid} setGrid={setGrid} />
       </div>

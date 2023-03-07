@@ -25,6 +25,13 @@ export default class BotManager {
     return this.bots;
   }
 
+  public getBotsByIds(ids: string[]): Bot[] {
+    let bots = this.bots.filter((bot) => {
+      return ids.includes(bot._id.toString());
+    });
+    return bots;
+  }
+
   public async removeBot(id: string): Promise<any> {
     this.bots = this.bots.filter((bot) => {
       return !bot._id.equals(id);

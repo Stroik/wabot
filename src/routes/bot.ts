@@ -3,10 +3,11 @@ import { z } from "zod";
 import BotModel from "../models/bot";
 import { Types } from "mongoose";
 import { botManager } from "../bot/BotManager";
-import { Log } from "../utils/log";
 import { timer } from "../utils/timer";
 import { MessageMedia } from "whatsapp-web.js";
 import Bot from "../bot/Bot";
+import { botPreguntas } from "../utils/botMessages";
+import ConfigModel from "../models/config";
 
 const getBots = publicProcedure.query(async () => {
   const bots = await BotModel.find();
@@ -160,6 +161,43 @@ const validateNumbers = publicProcedure
     }
   });
 
+const startConversationBetweenBots = publicProcedure
+  .input(
+    z.object({
+      botId: z.string(),
+      bots: z.array(z.string()),
+    })
+  )
+  .mutation(async ({ input }) => {
+    const { botId, bots }: { botId: string; bots: string[]; timeout?: number } =
+      input;
+    const timeout =
+      (await ConfigModel.findOne({
+        key: "timeout",
+      }).then((config) => config?.value)) || 60 * 1000;
+
+    try {
+      const selectedBots = botManager.getBotsByIds(bots);
+      const sender = botManager.getBot(botId);
+      if (bots && sender) {
+        for (let i = 0; i < bots.length; i++) {
+          let question =
+            botPreguntas[Math.floor(Math.random() * botPreguntas.length)];
+          const bot = selectedBots[i];
+          await sender.sendMessage(bot.info.wid._serialized, question);
+          await timer(timeout);
+        }
+        return { status: "success", message: "La interacción ha comenzado" };
+      } else {
+        return { status: "error", error: "No hay bots disponibles" };
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        return { status: "error", error: error.message };
+      }
+    }
+  });
+
 export const botRouter = router({
   getBots,
   newBot,
@@ -168,4 +206,5 @@ export const botRouter = router({
   getQr,
   sendBulk,
   validateNumbers,
+  startConversationBetweenBots,
 });

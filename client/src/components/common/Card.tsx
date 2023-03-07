@@ -4,7 +4,7 @@ import { Fragment } from "react";
 interface Buttons {
   icon: JSX.Element;
   onClick: (id: string) => void;
-  label: string;
+  label?: string;
   style: string;
   show: boolean;
 }
@@ -46,7 +46,9 @@ export default function Card({
                   {...rest}
                 >
                   {icon}
-                  {label.length > 0 && <span className="ml-2">{label}</span>}
+                  {label && label.length > 0 && (
+                    <span className="ml-2">{label}</span>
+                  )}
                 </button>
               )}
             </Fragment>

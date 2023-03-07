@@ -6,8 +6,8 @@ import Messages from "./pages/Messages";
 import Bulk from "./pages/Bulk";
 import Campaigns from "./pages/Campaigns";
 import Contacts from "./pages/Contacts";
-import ContactsValidation from "./pages/ContactsValidation";
 import Books from "./pages/Books";
+import Interact from "./pages/Interact";
 
 const rootRoute = new RootRoute({
   component: () => <Layout />,
@@ -17,12 +17,6 @@ const dashboardRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "/",
   component: () => <Dashboard />,
-});
-
-const botsRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: "bots",
-  component: () => <Bots />,
 });
 
 const messagesRoute = new Route({
@@ -43,9 +37,26 @@ const campaignsRoute = new Route({
   component: () => <Campaigns />,
 });
 
+const botsRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "bots",
+});
+
 const booksRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "books",
+});
+
+const botsIndexRoute = new Route({
+  getParentRoute: () => botsRoute,
+  path: "/",
+  component: () => <Bots />,
+});
+
+const botsInteractRoute = new Route({
+  getParentRoute: () => botsRoute,
+  path: "$botId/interact",
+  component: () => <Interact />,
 });
 
 const booksIndexRoute = new Route({
@@ -62,11 +73,11 @@ const booksContactsRoute = new Route({
 
 const routeTree = rootRoute.addChildren([
   dashboardRoute,
-  botsRoute,
   messagesRoute,
   bulkRoute,
   campaignsRoute,
   booksRoute.addChildren([booksIndexRoute, booksContactsRoute]),
+  botsRoute.addChildren([botsIndexRoute, botsInteractRoute]),
 ]);
 
 declare module "@tanstack/react-router" {

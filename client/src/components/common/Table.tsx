@@ -1,4 +1,5 @@
 import {
+  RowSelectionState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -12,6 +13,7 @@ import {
   RiSortAsc,
   RiSortDesc,
 } from "react-icons/ri";
+import React, { HTMLProps } from "react";
 
 interface Button {
   label: any;
@@ -25,6 +27,29 @@ interface Props {
   buttons?: Array<Button>;
 }
 
+export function IndeterminateCheckbox({
+  indeterminate,
+  className = "",
+  ...rest
+}: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
+  const ref = React.useRef<HTMLInputElement>(null!);
+
+  React.useEffect(() => {
+    if (typeof indeterminate === "boolean") {
+      ref.current.indeterminate = !rest.checked && indeterminate;
+    }
+  }, [ref, indeterminate]);
+
+  return (
+    <input
+      type="checkbox"
+      ref={ref}
+      className={className + " cursor-pointer"}
+      {...rest}
+    />
+  );
+}
+
 export default function Table({ columns, data, buttons }: Props) {
   const table = useReactTable({
     data,
@@ -33,6 +58,7 @@ export default function Table({ columns, data, buttons }: Props) {
     getSortedRowModel: getSortedRowModel(),
     // getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    enableRowSelection: true,
   });
 
   return (

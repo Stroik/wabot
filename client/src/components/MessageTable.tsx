@@ -69,7 +69,7 @@ export default function MessageTable() {
           let contactNumber = numb.split("@")[0];
           return (
             <span className=" text-zinc-700">{formatPhone(contactNumber)}</span>
-          )
+          );
         },
       }),
       columnHelper.accessor("status", {

@@ -1,6 +1,4 @@
 import { Client, LocalAuth, MessageMedia } from "whatsapp-web.js";
-import { join } from "path";
-import { rmdirSync } from "fs";
 import { Types } from "mongoose";
 import BotModel from "../models/bot";
 import { Log } from "../utils/log";
@@ -52,7 +50,7 @@ export default class Bot extends Client {
     });
 
     this.on("message", async (msg) => {
-      autoResponse(msg);
+      await autoResponse(msg);
     });
   }
 
