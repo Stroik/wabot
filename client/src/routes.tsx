@@ -4,10 +4,12 @@ import Dashboard from "./pages/Dashboard";
 import Bots from "./pages/Bots";
 import Messages from "./pages/Messages";
 import Bulk from "./pages/Bulk";
-import Campaigns from "./pages/Campaigns";
+import Campaigns from "./pages/Campaigns/Campaigns";
 import Contacts from "./pages/Contacts";
 import Books from "./pages/Books";
 import Interact from "./pages/Interact";
+import NewCampaign from "./pages/Campaigns/NewCampaign";
+import { CampaignProvider } from "./pages/Campaigns/CampaignContext";
 
 const rootRoute = new RootRoute({
   component: () => <Layout />,
@@ -34,7 +36,18 @@ const bulkRoute = new Route({
 const campaignsRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "campaigns",
+});
+
+const campaignIndexRoute = new Route({
+  getParentRoute: () => campaignsRoute,
+  path: "/",
   component: () => <Campaigns />,
+});
+
+const campaignNewRoute = new Route({
+  getParentRoute: () => campaignsRoute,
+  path: "new",
+  component: () => <NewCampaign />,
 });
 
 const botsRoute = new Route({
@@ -75,7 +88,7 @@ const routeTree = rootRoute.addChildren([
   dashboardRoute,
   messagesRoute,
   bulkRoute,
-  campaignsRoute,
+  campaignsRoute.addChildren([campaignIndexRoute, campaignNewRoute]),
   booksRoute.addChildren([booksIndexRoute, booksContactsRoute]),
   botsRoute.addChildren([botsIndexRoute, botsInteractRoute]),
 ]);

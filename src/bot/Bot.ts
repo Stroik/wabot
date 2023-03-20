@@ -1,8 +1,9 @@
 import { Client, LocalAuth, MessageMedia } from "whatsapp-web.js";
 import { Types } from "mongoose";
 import BotModel from "../models/bot";
-import { Log } from "../utils/log";
 import MessageModel from "../models/message";
+import ConfigModel from "../models/config";
+import { Log } from "../utils/log";
 import { autoResponse } from "../utils/autoResponse";
 
 export default class Bot extends Client {
@@ -50,7 +51,22 @@ export default class Bot extends Client {
     });
 
     this.on("message", async (msg) => {
-      await autoResponse(msg);
+      let isChatting = await ConfigModel.findOne({ key: "isChatting" }).then(
+        (res) => {
+          return res ? Boolean(res.value) : false;
+        }
+      );
+      console.log("isChatting", isChatting);
+      if (isChatting) {
+        await autoResponse(msg);
+      }
+    });
+
+    this.off("message", async (msg) => {
+      const { body } = msg;
+      if (body === "!done") {
+        await msg.reply("okis, bye!");
+      }
     });
   }
 

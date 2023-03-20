@@ -45,7 +45,7 @@ export default function GridSelector({ grid, setGrid }: GridSelectorProps) {
     <div ref={wrapperRef} className="relative">
       <button
         onClick={handleOpen}
-        className="flex items-center justify-center w-10 h-10 text-gray-100 bg-cyan-400 rounded hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+        className="flex items-center justify-center w-10 h-10 text-gray-100 bg-sky-600 rounded hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-sky-400"
       >
         <span className="sr-only">Columnas</span>
         <RiMenuFill size={20} />

@@ -171,10 +171,6 @@ const startConversationBetweenBots = publicProcedure
   .mutation(async ({ input }) => {
     const { botId, bots }: { botId: string; bots: string[]; timeout?: number } =
       input;
-    const timeout =
-      (await ConfigModel.findOne({
-        key: "timeout",
-      }).then((config) => config?.value)) || 60 * 1000;
 
     try {
       const selectedBots = botManager.getBotsByIds(bots);
@@ -185,9 +181,39 @@ const startConversationBetweenBots = publicProcedure
             botPreguntas[Math.floor(Math.random() * botPreguntas.length)];
           const bot = selectedBots[i];
           await sender.sendMessage(bot.info.wid._serialized, question);
-          await timer(timeout);
+          await timer(5000);
         }
         return { status: "success", message: "La interacción ha comenzado" };
+      } else {
+        return { status: "error", error: "No hay bots disponibles" };
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        return { status: "error", error: error.message };
+      }
+    }
+  });
+
+const finishConversationBetweenBots = publicProcedure
+  .input(
+    z.object({
+      botId: z.string(),
+    })
+  )
+  .mutation(async ({ input }) => {
+    const { botId }: { botId: string } = input;
+
+    try {
+      const bots = botManager.getBots();
+      const sender = botManager.getBot(botId);
+
+      if (bots && sender) {
+        for (let i = 0; i < bots.length; i++) {
+          const bot = bots[i];
+          await sender.sendMessage(bot.info.wid._serialized, "!done");
+          await timer(5000);
+        }
+        return { status: "success", message: "La interacción ha finalizado" };
       } else {
         return { status: "error", error: "No hay bots disponibles" };
       }
@@ -207,4 +233,5 @@ export const botRouter = router({
   sendBulk,
   validateNumbers,
   startConversationBetweenBots,
+  finishConversationBetweenBots,
 });

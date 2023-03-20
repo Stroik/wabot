@@ -129,24 +129,26 @@ export default function Bots() {
         title="Estado y registro de Whatsapp"
         subtitle="En esta sección se listan todos los whatsapp que se agregaron y el estado de conexión que tienen. Para agregar un nuevo Whatsapp, sólo hay que dar click en el botón azul."
       >
-        <button
-          className="rounded px-4 py-2 text-white bg-cyan-700 flex items-center gap-2"
-          onClick={() => {
-            newBot.mutateAsync("", {
-              onSuccess: (data) => {
-                utils.bot.getBots.invalidate();
-              },
-            });
-          }}
-        >
-          <RiWhatsappFill size={28} className="text-green-500" />
-          <span>Agregar nuevo</span>
-        </button>
+        <div className="relative">
+          <button
+            className="rounded px-4 py-2 text-white bg-cyan-700 flex items-center gap-2"
+            onClick={() => {
+              newBot.mutateAsync("", {
+                onSuccess: (data) => {
+                  utils.bot.getBots.invalidate();
+                },
+              });
+            }}
+          >
+            <RiWhatsappFill size={28} className="text-green-500" />
+            <span>Agregar nuevo</span>
+          </button>
+          <div className="flex items-center justify-end absolute -bottom-20 right-0">
+            <GridSelector grid={grid} setGrid={setGrid} />
+          </div>
+        </div>
       </PageTitle>
-      <div className="flex items-center justify-end">
-        <GridSelector grid={grid} setGrid={setGrid} />
-      </div>
-      <div className={`grid w-full gap-2 mt-4 ${grid} bg-zinc-100 p-4 rounded`}>
+      <div className={`grid w-full gap-2 mt-4 ${grid} p-4 rounded`}>
         {botList &&
           botList.map((bot, i) => {
             const { _id, me, status } = bot;
