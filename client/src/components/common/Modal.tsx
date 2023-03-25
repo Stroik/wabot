@@ -4,14 +4,14 @@ import { RiLightbulbLine } from "react-icons/ri";
 interface ModalProps {
   title: string;
   isOpen: boolean;
-  onClose: () => void;
+  onClose: () => void | (() => Promise<void>);
   children: React.ReactNode;
   actionsButtons?: ActionButton[];
 }
 
 export interface ActionButton {
   label: string;
-  onClick: () => void;
+  onClick: (() => Promise<void>) | ((e: any) => Promise<void>) | (() => void);
   className?: string;
   condition: boolean;
 }

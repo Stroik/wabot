@@ -31,9 +31,7 @@ export default function Books() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleNewBook = async (
-    e: FormEvent<HTMLFormElement>
-  ): Promise<void> => {
+  const handleNewBook = async (e: FormEvent<HTMLFormElement | any>) => {
     e.preventDefault();
     if (typeof form.name === "string" && typeof form.description === "string") {
       await createBook.mutateAsync(
@@ -49,7 +47,6 @@ export default function Books() {
       );
       setIsOpen(false);
     }
-    return;
   };
 
   const goTo = (id: string) => {
@@ -57,8 +54,8 @@ export default function Books() {
       if (book._id === id) {
         setBookName(book.name);
       }
-      let url = `/books/${id}/contacts`;
-      navigate({ to: url });
+      const url = `/books/${id}/contacts`;
+      navigate({ to: url, search: {}, params: {} });
     });
   };
 
@@ -150,7 +147,7 @@ export default function Books() {
           },
           {
             label: "Guardar",
-            onClick: (e) => handleNewBook(e),
+            onClick: (e: any) => handleNewBook(e),
             condition: true,
           },
         ]}
@@ -168,7 +165,7 @@ export default function Books() {
               name="name"
               className="rounded border border-zinc-300 px-2 py-2"
               value={form.name}
-              onChange={(e) => handleChange(e)}
+              onChange={(e: any) => handleChange(e)}
             />
           </label>
           <label htmlFor="description" className="flex w-full justify-between">

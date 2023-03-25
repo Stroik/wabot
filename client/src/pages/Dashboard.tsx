@@ -1,11 +1,13 @@
 import BarChart from "../components/BarChart";
+import PageTitle from "../components/common/PageTitle";
 
 export default function Dashboard() {
   return (
     <>
-      <div className="flex justify-between mb-4 pb-2 border-b">
-        <h1 className="text-3xl">Escritorio</h1>
-      </div>
+      <PageTitle
+        title="Escritorio"
+        subtitle="Todos los datos que se ven acá son falsos. Eventualmente van a ser verdaderos, pero lleva tiempo."
+      />
       <div className="grid grid-cols-3 h-64 gap-4 w-full relative">
         <div className="rounded bg-cyan-500 text-white w-full">
           <h1 className="py-4 text-xl px-2">Estadísticas de Mensajes</h1>

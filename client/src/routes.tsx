@@ -27,12 +27,6 @@ const messagesRoute = new Route({
   component: () => <Messages />,
 });
 
-const bulkRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: "envios",
-  component: () => <Bulk />,
-});
-
 const campaignsRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "campaigns",
@@ -48,6 +42,12 @@ const campaignNewRoute = new Route({
   getParentRoute: () => campaignsRoute,
   path: "new",
   component: () => <NewCampaign />,
+});
+
+const campaignExpressRoute = new Route({
+  getParentRoute: () => campaignsRoute,
+  path: "express",
+  component: () => <Bulk />,
 });
 
 const botsRoute = new Route({
@@ -87,8 +87,7 @@ const booksContactsRoute = new Route({
 const routeTree = rootRoute.addChildren([
   dashboardRoute,
   messagesRoute,
-  bulkRoute,
-  campaignsRoute.addChildren([campaignIndexRoute, campaignNewRoute]),
+  campaignsRoute.addChildren([campaignIndexRoute, campaignNewRoute, campaignExpressRoute]),
   booksRoute.addChildren([booksIndexRoute, booksContactsRoute]),
   botsRoute.addChildren([botsIndexRoute, botsInteractRoute]),
 ]);

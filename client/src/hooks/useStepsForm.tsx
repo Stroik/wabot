@@ -17,8 +17,12 @@ const useStepsForm = (initialSteps: Step[], initialValues: FormValues) => {
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    console.log({ ...formValues, [e.target.name]: e.target.value });
-    setFormValues({ ...formValues, [e.target.name]: e.target.value });
+    setFormValues((prev) => {
+      console.log("prev", prev);
+      const newFormValues = { ...prev, [e.target.name]: e.target.value };
+      console.log("newFormValues", newFormValues);
+      return newFormValues;
+    });
   };
 
   const goToNextStep = () => {

@@ -1,9 +1,6 @@
 import Bot from "./Bot";
 import { Types } from "mongoose";
 import BotModel from "../models/bot";
-import { botPreguntas } from "../utils/botMessages";
-import { timer } from "../utils/timer";
-import { Log } from "../utils/log";
 
 export default class BotManager {
   private bots: Bot[] = [];

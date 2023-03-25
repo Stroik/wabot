@@ -15,10 +15,17 @@ interface Bot {
   me: string;
 }
 
+interface QrStatus {
+  status: string;
+  message: string;
+  qr: string;
+  error: string;
+}
+
 export default function BotTable() {
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState("");
-  const [qrStatus, setQrStatus] = useState({
+  const [qrStatus, setQrStatus] = useState<QrStatus>({
     status: "",
     message: "",
     qr: "",
@@ -59,12 +66,12 @@ export default function BotTable() {
 
   const handleStartQR = async (id: string) => {
     startQR.mutateAsync(id, {
-      onSuccess: (data) => {
+      onSuccess: (data: any) => {
         setTitle("Codigo QR");
         setIsOpen(true);
         setQrStatus(data);
         getQR.mutateAsync(id, {
-          onSuccess: (data) => {
+          onSuccess: (data: any) => {
             setQrStatus(data);
           },
         });
@@ -76,7 +83,7 @@ export default function BotTable() {
     setTitle("Codigo QR");
     setIsOpen(true);
     getQR.mutateAsync(id, {
-      onSuccess: (data) => {
+      onSuccess: (data: any) => {
         setQrStatus(data);
       },
     });
@@ -118,7 +125,6 @@ export default function BotTable() {
             title={title}
             isOpen={isOpen}
             onClose={() => setIsOpen(false)}
-            onConfirm={() => console.log("Confirm!")}
           >
             <div className="flex items-center justify-center gap-1">
               <div className="flex flex-col">

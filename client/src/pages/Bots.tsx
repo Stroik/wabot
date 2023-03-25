@@ -61,11 +61,11 @@ export default function Bots() {
 
   const handleStartQR = async (id: string) => {
     setId(id);
-    const data = await startQR.mutateAsync(id);
+    const data: any = await startQR.mutateAsync(id);
     setTitle("Codigo QR");
     setIsOpen(true);
     setQrStatus(data);
-    const qrData = await getQR.mutateAsync(id);
+    const qrData: any = await getQR.mutateAsync(id);
     setQrStatus(qrData);
   };
 
@@ -73,12 +73,8 @@ export default function Bots() {
     setId(id);
     setTitle("Codigo QR");
     setIsOpen(true);
-    const data = await getQR.mutateAsync(id);
+    const data: any = await getQR.mutateAsync(id);
     setQrStatus(data);
-  };
-
-  const handleInteractions = (id: string) => {
-    navigate(`/bots/${id}/interact`);
   };
 
   const buttonsCards = [
@@ -98,7 +94,10 @@ export default function Bots() {
     },
     {
       icon: <RiQuestionAnswerLine size={20} className="tool-tip" />,
-      onClick: (id: string) => navigate({ to: `/bots/${id}/interact` }),
+      onClick: (id: string) => {
+        const url = `/bots/${id}/interact`;
+        navigate({ to: url, search: {}, params: {} });
+      },
       style: "bg-orange-700 text-white hover:opacity-90",
       show: true,
       "data-tooltip-content": "Generar interacciones entre bots",
@@ -151,7 +150,7 @@ export default function Bots() {
       <div className={`grid w-full gap-2 mt-4 ${grid} p-4 rounded`}>
         {botList &&
           botList.map((bot, i) => {
-            const { _id, me, status } = bot;
+            const { _id, me, status } = bot as Bot;
             return (
               <Card
                 key={i}

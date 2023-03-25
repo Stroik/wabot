@@ -70,17 +70,6 @@ export default function Navbar() {
             </span>
           </NavbarLink>
         </li>
-        <li className="text-base py-2 hover:cursor-pointer">
-          <NavbarLink
-            to="/envios"
-            className="text-base py-2 hover:cursor-pointer flex flex-col items-center group"
-          >
-            <RiMailAddFill size={24} className="group-hover:text-green-500" />
-            <span className="hidden md:block group-hover:text-cyan-500">
-              Envios
-            </span>
-          </NavbarLink>
-        </li>
       </ul>
     </nav>
   );
@@ -100,6 +89,8 @@ function NavbarLink({ to, children, className }: NavbarLinkProps) {
         className: "text-cyan-500",
       }}
       className={className}
+      search={{}}
+      params={{}}
     >
       {children}
     </Link>

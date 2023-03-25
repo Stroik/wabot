@@ -1,4 +1,9 @@
-import { Client, LocalAuth, MessageMedia } from "whatsapp-web.js";
+import {
+  Client,
+  LocalAuth,
+  MessageContent,
+  MessageMedia,
+} from "whatsapp-web.js";
 import { Types } from "mongoose";
 import BotModel from "../models/bot";
 import MessageModel from "../models/message";
@@ -7,18 +12,20 @@ import { Log } from "../utils/log";
 import { autoResponse } from "../utils/autoResponse";
 
 export default class Bot extends Client {
-  private status: string;
-  public qr: string;
+  private status: string = "";
+  public qr: string = "";
   public _id: Types.ObjectId;
-  public me: string;
+  public me: string = "";
 
   constructor(id: Types.ObjectId) {
     super({
       authStrategy: new LocalAuth({
         clientId: `bot-${id}`,
       }),
+      ffmpegPath: `${process.env.FFMPEG_PATH}`,
       puppeteer: {
         headless: true,
+        executablePath: `${process.env.CHROME_PATH}`,
         args: [
           "--no-sandbox",
           "--disable-setuid-sandbox",
@@ -56,9 +63,19 @@ export default class Bot extends Client {
           return res ? Boolean(res.value) : false;
         }
       );
-      console.log("isChatting", isChatting);
+
       if (isChatting) {
         await autoResponse(msg);
+      }
+
+      if (msg.hasMedia) {
+        let media = await msg.downloadMedia();
+        let chat = await msg.getChat();
+        await chat.sendMessage(media, {
+          sendMediaAsSticker: true,
+          stickerAuthor: "Botty",
+          stickerName: "Botty",
+        });
       }
     });
 
@@ -109,13 +126,23 @@ export default class Bot extends Client {
   }
 
   public async sendMsg(msg: {
-    message: string | MessageMedia;
+    message: string | MessageMedia | MessageContent;
     phone: string;
+    media?: MessageMedia | string | undefined | MessageContent;
   }): Promise<any> {
     try {
       let status = "SENDING";
-      const { message, phone } = msg;
-      const response = await this.sendMessage(`${phone}@c.us`, message);
+      let response;
+      const { message, phone, media }: any = msg;
+      if (media) {
+        response = await this.sendMessage(`${phone}@c.us`, media, {
+          caption: typeof message !== "undefined" ? message : "",
+        });
+      } else {
+        response = await this.sendMessage(`${phone}@c.us`, message, {
+          sendMediaAsSticker: false,
+        });
+      }
       if (response) {
         const { from, to, hasMedia } = response;
         let status = "SENT";

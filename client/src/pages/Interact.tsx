@@ -20,7 +20,7 @@ import { useLocalStorage } from "../hooks/useLocalstorage";
 export default function Interact() {
   const { botId }: { botId: any } = useParams();
   const { data, isLoading } = trpc.bot.getBots.useQuery();
-  const setConfig = trpc.config.setConfig.useMutation();
+  const setConfig: any = trpc.config.setConfig.useMutation();
   const startInteraction = trpc.bot.startConversationBetweenBots.useMutation();
   const stopInteraction = trpc.bot.finishConversationBetweenBots.useMutation();
 
@@ -38,7 +38,7 @@ export default function Interact() {
         bots: botsSelected,
       },
       {
-        onSuccess: (data) => {
+        onSuccess: (data: any) => {
           toast.success(data.message);
         },
       }
@@ -173,8 +173,8 @@ export default function Interact() {
         {isLoading && <Loading />}
         <ul className="grid grid-cols-1 md:grid-cols-5 gap-2 ">
           {data
-            ?.filter((bot) => bot._id !== botId && bot.status === "READY")
-            .map((bot) => {
+            ?.filter((bot: any) => bot._id !== botId && bot.status === "READY")
+            .map((bot: any) => {
               return (
                 <li
                   key={bot._id}

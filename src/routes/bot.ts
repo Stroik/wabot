@@ -7,7 +7,6 @@ import { timer } from "../utils/timer";
 import { MessageMedia } from "whatsapp-web.js";
 import Bot from "../bot/Bot";
 import { botPreguntas } from "../utils/botMessages";
-import ConfigModel from "../models/config";
 
 const getBots = publicProcedure.query(async () => {
   const bots = await BotModel.find();
@@ -98,9 +97,17 @@ const sendBulk = publicProcedure
       if (bots.length > 0) {
         for (const message of data) {
           const bot = bots[Math.floor(Math.random() * bots.length)];
-          await bot.sendMsg(message);
           if (media) {
-            await bot.sendMsg({ message: media, phone: message.phone });
+            await bot.sendMsg({
+              phone: message.phone,
+              message: message.message,
+              media,
+            });
+          } else {
+            await bot.sendMsg({
+              phone: message.phone,
+              message: message.message,
+            });
           }
           await timer(timeBetweenMessages);
         }

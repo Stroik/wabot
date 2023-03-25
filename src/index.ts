@@ -4,7 +4,7 @@ import app from "./app";
 import { Log } from "./utils/log";
 import { dbConnect } from "./db";
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.API_PORT || 3000;
 
 const start = async () => {
   await dbConnect();

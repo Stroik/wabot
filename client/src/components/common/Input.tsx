@@ -4,12 +4,13 @@ interface InputWithRefProps {
   label: string;
   name: string;
   placeholder: string;
-  required: boolean;
+  required?: boolean;
   type: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  value?: string;
+  value?: string | number;
   className?: string;
   inputRef?: Ref<HTMLInputElement>;
+  rest?: object;
 }
 
 const InputWithRef = forwardRef<HTMLInputElement, InputWithRefProps>(
@@ -24,6 +25,7 @@ const InputWithRef = forwardRef<HTMLInputElement, InputWithRefProps>(
       value,
       className,
       inputRef,
+      ...rest
     },
     ref
   ) => {
@@ -41,7 +43,8 @@ const InputWithRef = forwardRef<HTMLInputElement, InputWithRefProps>(
           required={required}
           className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
           onChange={onChange}
-          value={value}
+          defaultValue={value}
+          {...rest}
         />
       </div>
     );
@@ -52,11 +55,12 @@ interface InputWithStateProps {
   label: string;
   name: string;
   placeholder: string;
-  required: boolean;
+  required?: boolean;
   type: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  value?: string;
+  value?: string | number;
   className?: string;
+  rest?: object;
 }
 
 const InputWithState = ({
@@ -68,6 +72,7 @@ const InputWithState = ({
   onChange,
   value,
   className,
+  ...rest
 }: InputWithStateProps) => {
   return (
     <div className={`${className ? className : ""} mb-4`}>
@@ -82,7 +87,8 @@ const InputWithState = ({
         required={required}
         className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
         onChange={onChange}
-        value={value}
+        defaultValue={value}
+        {...rest}
       />
     </div>
   );
@@ -107,7 +113,7 @@ const Input = ({
         label={label}
         name={name}
         placeholder={placeholder}
-        required={required}
+        required={required || false}
         type={type}
         onChange={onChange}
         value={value}
